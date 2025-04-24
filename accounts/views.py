@@ -1,3 +1,4 @@
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
@@ -32,3 +33,12 @@ def login_view(request):
 def logout_view(request):
     logout(request)
     return redirect("login")
+
+
+def topup_view(request):
+    if request.method == 'POST':
+        topup_amount = request.POST.get('topup_amount')
+        request.user.userprofile.account_balance += float(topup_amount)
+        request.user.save()
+        return redirect("index")
+    return render(request, "accounts/topup.html", {}) 
