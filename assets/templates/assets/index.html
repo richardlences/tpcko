@@ -1,29 +1,23 @@
 {% extends "base.html" %}
+{% load dict_extras %}
 
 {% block content %}
 <div class="bg-dark text-light min-vh-100 d-flex flex-column align-items-center justify-content-start py-5 px-3">
    <h1 class="mb-4">Currencies</h1>
    <div class="list-group w-100" style="max-width: 500px;">
       {% for curr in currencies_list %}
+      {% with owned=user_currencies|get_item:curr.id %}
       <a href="{% url "detail" curr.id %}"
-         class="list-group-item list-group-item-action bg-secondary text-white border-0 mb-2 rounded-3 shadow-sm text-center">{{ curr.name }}</a>
+         class="list-group-item list-group-item-action bg-secondary text-white border-0 mb-2 rounded-3 shadow-sm text-center">
+         {{ curr.name }}
+         <span class="d-block small text-info">
+            You own: {{ owned|default:"0" }}
+         </span>
+      </a>
+      {% endwith %}
       {% endfor %}
    </div>
 </div>
 
 
-
-
-<!-- {% if currencies_list %}
-   <h1>Currencies</h1>
-   <ul>
-   {% for curr in currencies_list %}
-      <li>
-      <a href="{% url "detail" curr.id %}">{{ curr.name }}</a>
-      </li>
-   {% endfor %}
-   </ul>
-{% else %}
-   <h1>There are no currencies</h1>
-{% endif %} -->
 {% endblock content %}
